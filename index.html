@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC13</title>
+    <style>
+        @font-face {
+            font-family: 'OCR-A BT';
+            font-style: normal;
+            font-weight: normal;
+            src: local('OCR-A BT'), url('OCR-a___.woff') format('woff');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #fff;
+            padding-top: 32px; /* Increased by 60% from 20px */
+            /* Remove overflow: hidden to allow scrolling */
+        }
+
+        .container {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-gif {
+            width: 115px;
+            height: 115px;
+        }
+
+        /* Mobile specific loading gif sizing */
+        @media (max-width: 768px) {
+            .loading-gif {
+                width: 130px;
+                height: 130px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .loading-gif {
+                width: 140px;
+                height: 140px;
+            }
+        }
+
+        /* Large screens */
+        @media (min-width: 1440px) {
+            .loading-gif {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 1s ease, transform 1s ease;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+        }
+
+        .main-content.slide-up {
+            transform: translateY(-100%);
+        }
+
+        .main-image {
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+        }
+
+        .interaction-area {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 60px;
+        }
+
+        .enter-button {
+            font-size: 3.9rem; /* 30% bigger from 3rem */
+            color: #939393; /* 30% darker from #d2d2d2 */
+            font-family: Helvetica, Arial, sans-serif;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .enter-button:hover {
+            opacity: 0.7;
+        }
+
+        .scan-animation {
+            display: none;
+        }
+
+        .scan-animation.active {
+            display: block;
+        }
+
+        .app-footer {
+            position: fixed;
+            bottom: 15px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+            z-index: 5;
+        }
+
+        .footer-text {
+            font-family: 'OCR-A BT', monospace;
+            font-size: 0.7rem; /* Smaller than previous 0.9rem */
+            color: #d2d2d2;
+            letter-spacing: 0.1em;
+            text-align: right;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-text:hover {
+            opacity: 0.7;
+        }
+
+        /* Media queries adjustments for footer-text font-size and app-footer padding */
+        @media (max-width: 768px) {
+            .app-footer {
+                bottom: 10px; /* Adjust for mobile */
+                padding: 0 15px;
+            }
+            .footer-text {
+                font-size: 0.7rem; /* Increased by 40% from 0.5rem */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-footer {
+                bottom: 8px; /* Adjust for smaller mobile */
+                padding: 0 10px;
+            }
+            .footer-text {
+                font-size: 0.56rem; /* Increased by 40% from 0.4rem */
+            }
+        }
+
+        @media (max-width: 375px) {
+            .footer-text {
+                font-size: 0.49rem; /* Increased by 40% from 0.35rem */
+            }
+        }
+
+        .content-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #fff;
+            overflow-y: auto;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: transform 1s cubic-bezier(0.77,0,0.175,1), opacity 0.7s cubic-bezier(0.77,0,0.175,1);
+            padding: 3vw 0 0 0;
+            z-index: 10;
+            will-change: transform, opacity;
+        }
+        .content-page.slide-up {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .gallery-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 3.9vw;
+        }
+
+        .gallery-grid {
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            border: none;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: box-shadow 0.2s, transform 0.3s cubic-bezier(0.77,0,0.175,1);
+            margin: 0 auto;
+            padding: 0;
+            width: 90%;
+            height: 320px;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .gallery-grid:hover {
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            transform: translateY(-5px);
+        }
+        
+        .gallery-grid:active {
+            transform: translateY(0px);
+        }
+        
+        .grid-image {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 24px;
+            margin: 0;
+            padding: 0;
+            transform: scale(1.1);
+            transition: transform 0.4s cubic-bezier(0.77,0,0.175,1);
+        }
+        
+        .gallery-grid:hover .grid-image {
+            transform: scale(1.05);
+        }
+        
+        .grid-content {
+            display: none;
+        }
+        
+        .grid-watermark {
+            font-size: 1rem;
+            color: #222;
+            letter-spacing: 0.12em;
+            font-weight: 600;
+            opacity: 0.7;
+            text-align: center;
+            margin-top: 1vw;
+            margin-bottom: 480px; /* Added spacing as requested */
+            position: static;
+        }
+
+        .content-page > .gallery-container {
+            position: static;
+        }
+
+        /* Grid stack elements */
+        .grid-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 1vw;
+            align-items: center;
+            margin-bottom: 2vw;
+            opacity: 0;
+            transform: translateY(40px);
+            pointer-events: none;
+            transition: opacity 0.5s cubic-bezier(0.77,0,0.175,1), transform 0.5s cubic-bezier(0.77,0,0.175,1);
+            max-height: 0;
+            overflow: hidden;
+        }
+        
+        .grid-stack.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            max-height: 2000px; /* Large enough to contain content */
+            transition: opacity 0.5s cubic-bezier(0.77,0,0.175,1), 
+                        transform 0.5s cubic-bezier(0.77,0,0.175,1),
+                        max-height 0.8s cubic-bezier(0.77,0,0.175,1);
+        }
+        
+        .stack-image {
+            width: 80%;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .stack-image:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Individual grid backgrounds */
+        .grid-1 .grid-image {
+            background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/grid1-h4NWrFlm1QireasBwzZhh22TbZPwlL.png');
+            background-position: center;
+            background-size: cover;
+        }
+
+        .grid-2 .grid-image {
+            background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/grid2-BkUCucTD9xiLj1kWS5N3M6sU5btwRF.png');
+            background-position: center;
+            background-size: cover;
+        }
+
+        .grid-3 .grid-image {
+            background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/grid3-OSI564vIZPV7BCqj7OarumhDU2wzLh.png');
+            background-position: center;
+            background-size: cover;
+        }
+
+        .grid-4 .grid-image {
+            background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/grid4-G1i7DhtD90I8GTelT2Oa5s6XekS08J.png');
+            background-position: center;
+            background-size: cover;
+        }
+
+        .grid-5 .grid-image {
+            background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/grid5-SWEdTR3ECYSGdLUKtqPj372J2hIRB0.png');
+            background-position: center;
+            background-size: cover;
+        }
+
+        /* Hide scrollbars for a cleaner look */
+        .content-page::-webkit-scrollbar {
+            width: 0.5em;
+            background: transparent;
+        }
+        .content-page::-webkit-scrollbar-thumb {
+            background: #e0e0e0;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 24px; /* Increased by 60% from 15px */
+            }
+
+            .main-content {
+                padding-bottom: 192px; /* Increased by 60% from 120px */
+            }
+
+            .main-image {
+                max-height: 60vh;
+            }
+            
+            .interaction-area {
+                margin-top: 1.5rem;
+            }
+
+            .enter-button {
+                font-size: 3.25rem; /* 30% bigger from 2.5rem */
+            }
+
+            .app-footer {
+                bottom: 10px; /* Adjust for mobile */
+                padding: 0 15px;
+            }
+
+            .footer-text {
+                font-size: 0.7rem; /* Increased by 40% from 0.5rem */
+            }
+
+            .content-page {
+                padding: 1rem 0.5rem;
+            }
+
+            .gallery-container {
+                gap: 2vw;
+            }
+
+            .gallery-grid {
+                height: 220px;
+            }
+
+            .grid-watermark {
+                margin-bottom: 330px;
+            }
+            
+            .stack-image {
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 16px; /* Increased by 60% from 10px */
+            }
+
+            .main-content {
+                padding-bottom: 160px; /* Increased by 60% from 100px */
+            }
+
+            .main-image {
+                max-height: 50vh;
+            }
+            
+            .interaction-area {
+                margin-top: 1rem;
+            }
+
+            .enter-button {
+                font-size: 2.6rem; /* 30% bigger from 2rem */
+            }
+
+            .app-footer {
+                bottom: 8px; /* Adjust for smaller mobile */
+                padding: 0 10px;
+            }
+
+            .footer-text {
+                font-size: 0.56rem; /* Increased by 40% from 0.4rem */
+            }
+        }
+
+        @media (max-width: 375px) {
+            .footer-text {
+                font-size: 0.49rem; /* Increased by 40% from 0.35rem */
+            }
+        }
+
+        @media (min-width: 1440px) {
+            body {
+                padding-top: 48px; /* Increased by 60% from 30px */
+            }
+
+            .main-content {
+                padding-bottom: 240px; /* Increased by 60% from 150px */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Loading Screen -->
+        <div class="loading-screen" id="loadingScreen">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/loading-buffering-fo7nh4ObdwQyeTokg7mrUoq5wXCiA1.gif" alt="Loading" class="loading-gif">
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/TRASHUX%20html%20web002landingfixed-DlOCRY1J0hmqjQsI4xpmykXkcKp9g4.png" alt="TRASHUX" class="main-image">
+            
+            <div class="interaction-area" id="interactionArea">
+                <button class="enter-button" id="enterButton">ENTER</button>
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/original-779f1d5d2e5e891f2d528582bbcc1b02-WySj6VyFh4OF8jda52E7uu5m95roPc.gif" alt="Scanning" width="187" height="187" class="scan-animation" id="scanAnimation">
+            </div>
+        </div>
+
+        <!-- Footer Text -->
+        <div class="app-footer">
+            <a href="https://www.trashux.net" class="footer-text">MADE BY TRASHUX</a>
+        </div>
+
+        <!-- Content Page -->
+        <div class="content-page" id="contentPage">
+            <div class="gallery-container">
+                <!-- Grid 1 -->
+                <div class="gallery-grid grid-1" id="grid1">
+                    <div class="grid-image"></div>
+                    <div class="grid-content"></div>
+                </div>
+                <div class="grid-stack" id="grid1Stack">
+                    <img src="/placeholder.svg?height=200&width=600" alt="Grid 1 Content 1" class="stack-image">
+                    <img src="/placeholder.svg?height=200&width=600" alt="Grid 1 Content 2" class="stack-image">
+                    <img src="/placeholder.svg?height=200&width=600" alt="Grid 1 Content 3" class="stack-image">
+                </div>
+                
+                <!-- Grid 2 -->
+                <div class="gallery-grid grid-2" id="grid2">
+                    <div class="grid-image"></div>
+                    <div class="grid-content"></div>
+                </div>
+                <div class="grid-stack" id="grid2Stack">
+                    <img src="/placeholder.svg?height=200&width=600" alt="Grid 2 Content 1" class="stack-image">
+                    <img src="/placeholder.svg?height=200&width=600" alt="Grid 2 Content 2" class="stack-image">
+                </div>
+                
+                <!-- Grid 3 -->
+                <div class="gallery-grid grid-3" id="grid3">
+                    <div class="grid-image"></div>
+                    <div class="grid-content"></div>
+                </div>
+                <div class="grid-stack" id="grid3Stack">
+                    <img src="/placeholder.svg?height=200&width=600" alt="Grid 3 Content 1" class="stack-image">
+                    <img src="/placeholder.svg?height=200&width=600" alt="Grid 3 Content 2" class="stack-image">
+                    <img src="/placeholder.svg?height=200&width=600" alt="Grid 3 Content 3" class="stack-image">
+                </div>
+                
+                <!-- Grid 4 -->
+                <div class="gallery-grid grid-4" id="grid4">
+                    <div class="grid-image"></div>
+                    <div class="grid-content"></div>
+                </div>
+                <div class="grid-stack" id="grid4Stack">
+                    <img src="/placeholder.svg?height=200&width=600" alt="Grid 4 Content 1" class="stack-image">
+                </div>
+                
+                <!-- Grid 5 -->
+                <div class="gallery-grid grid-5" id="grid5">
+                    <div class="grid-image"></div>
+                    <div class="grid-content"></div>
+                </div>
+                <div class="grid-stack" id="grid5Stack">
+                    <img src="/placeholder.svg?height=200&width=600" alt="Grid 5 Content 1" class="stack-image">
+                    <img src="/placeholder.svg?height=200&width=600" alt="Grid 5 Content 2" class="stack-image">
+                </div>
+            </div>
+            <div class="grid-watermark">TRASHUX.NET</div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.38/bundled/lenis.min.js"></script>
+    <script>
+        // Wait for page to load
+        window.addEventListener('load', function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const mainContent = document.getElementById('mainContent');
+            const enterButton = document.getElementById('enterButton');
+            const scanAnimation = document.getElementById('scanAnimation');
+            const contentPage = document.getElementById('contentPage');
+
+            // Show loading for 2.3 seconds
+            setTimeout(function() {
+                // Hide loading screen
+                loadingScreen.classList.add('hidden');
+                // Show main content with fade in
+                setTimeout(function() {
+                    mainContent.classList.add('visible');
+                }, 100);
+            }, 2300);
+
+            // Add click handler to ENTER button - open the TX page file directly
+            enterButton.addEventListener('click', function() {
+                // Open the specific file that contains the full TX content
+                window.location.href = 'tx/index (2).html';
+            });
+            
+            // Make all grids clickable
+            const grids = document.querySelectorAll('.gallery-grid');
+            const gridStacks = document.querySelectorAll('.grid-stack');
+            
+            // Track which grid is currently expanded
+            let activeGridId = null;
+            
+            grids.forEach((grid) => {
+                grid.addEventListener('click', function() {
+                    const gridId = this.id;
+                    const targetStack = document.getElementById(gridId + 'Stack');
+                    
+                    // If clicking the same grid that's already active, close it
+                    if (activeGridId === gridId) {
+                        targetStack.classList.remove('active');
+                        activeGridId = null;
+                        return;
+                    }
+                    
+                    // Close any currently open grid
+                    if (activeGridId) {
+                        document.getElementById(activeGridId + 'Stack').classList.remove('active');
+                    }
+                    
+                    // Open the clicked grid
+                    targetStack.classList.add('active');
+                    activeGridId = gridId;
+                    
+                    // Scroll to the grid with smooth behavior
+                    setTimeout(() => {
+                        this.scrollIntoView({behavior: 'smooth', block: 'start'});
+                    }, 100);
+                });
+            });
+            
+            // Initialize Lenis for smooth scrolling
+            function initSmoothScroll() {
+                const lenis = new Lenis({
+                    wrapper: contentPage,
+                    content: contentPage,
+                    duration: 1.2,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                    direction: 'vertical',
+                    gestureDirection: 'vertical',
+                    smooth: true,
+                    smoothTouch: false,
+                    touchMultiplier: 2,
+                    infinite: false,
+                });
+                
+                function raf(time) {
+                    lenis.raf(time);
+                    requestAnimationFrame(raf);
+                }
+                
+                requestAnimationFrame(raf);
+            }
+        });
+    </script>
+</body>
+</html>

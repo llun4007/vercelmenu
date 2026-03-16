@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<title>Untitled Page</title>
+<meta name="generator" content="WYSIWYG Web Builder 20 Trial Version - https://www.wysiwygwebbuilder.com">
+<link href="Untitled1.css" rel="stylesheet">
+<link href="menu00.css?v=2" rel="stylesheet">
+<style>
+  .gif-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.1s;
+    z-index: 10;
+  }
+  .gif-overlay.active {
+    opacity: 1;
+  }
+  .clickable-container {
+    position: relative;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="scale-viewport">
+  <div class="page-wrapper">
+    <div class="content-container">
+    <div id="wb_Image1" class="asset" style="margin-left:45px;margin-top:-5px;width:901px;height:507px;">
+      <img src="images/menu0.png" id="Image1" alt="" width="901" height="507">
+    </div>
+    <div id="wb_Image2" class="asset clickable-container" style="margin-left:601px;margin-top:62px;width:212px;height:323px;">
+      <a href="../comunal_clone.html" id="link2"><img src="images/menuimage2.png" id="Image2" alt="" width="212" height="322"></a>
+      <img src="images/menuimage2corrupt.gif" class="gif-overlay" id="gif2" alt="" width="212" height="322">
+    </div>
+    <div id="wb_Image3" class="asset clickable-container" style="margin-left:157px;margin-top:211px;width:259px;height:136px;">
+      <a href="https://drive.google.com/file/d/1WpL1H8HAG0pM5qJUSbKZbyluZ8f-YuGG/view" id="link3"><img src="images/menuimage1.jpg" id="Image3" alt="" width="259" height="132"></a>
+      <img src="images/menuimage1corrupt3.gif" class="gif-overlay" id="gif3" alt="" width="259" height="132">
+    </div>
+    <div id="wb_Image4" class="asset" style="margin-left:570px;margin-top:422px;width:286px;height:56px;">
+      <img src="images/menutext22.png" id="Image4" alt="" width="286" height="56">
+    </div>
+    <div id="wb_Image5" class="asset" style="margin-left:202px;margin-top:432px;width:148px;height:49px;">
+      <img src="images/menutext11.png" id="Image5" alt="" width="148" height="49">
+    </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Function to play sound and show GIF overlay, then navigate
+  function playEffectAndNavigate(gifId, linkId) {
+    const gif = document.getElementById(gifId);
+    const link = document.getElementById(linkId);
+    
+    // Create new Audio object each time (ensures it plays even if previous is still playing)
+    const sound = new Audio('images/soundfxtrashux2.mp3');
+    
+    // Play sound immediately
+    sound.play().catch(e => {
+      console.log('Audio play failed:', e);
+    });
+    
+    // Reload GIF by resetting its src to play from beginning
+    const gifSrc = gif.src;
+    gif.src = '';
+    gif.src = gifSrc;
+    
+    // Show GIF overlay
+    gif.classList.add('active');
+    
+    // Navigate after effect plays (1.5 seconds)
+    setTimeout(() => {
+      gif.classList.remove('active');
+      window.location.href = link.href;
+    }, 1500);
+  }
+  
+  // For Image2, handle the anchor tag click
+  document.getElementById('wb_Image2').addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    playEffectAndNavigate('gif2', 'link2');
+  });
+  
+  // For Image3, handle the anchor tag click
+  document.getElementById('wb_Image3').addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    playEffectAndNavigate('gif3', 'link3');
+  });
+  
+  // Enable audio on first user interaction (required by most browsers)
+  let audioEnabled = false;
+  document.body.addEventListener('click', function enableAudio() {
+    if (!audioEnabled) {
+      const testSound = new Audio('images/soundfxtrashux2.mp3');
+      testSound.volume = 0.01;
+      testSound.play().then(() => {
+        testSound.pause();
+        audioEnabled = true;
+      }).catch(e => console.log('Audio initialization:', e));
+    }
+  }, { once: true });
+</script>
+</body>
+</html>

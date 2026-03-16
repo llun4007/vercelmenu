@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'OCR-A BT';
+      font-style: normal;
+      font-weight: normal;
+      src: local('OCR-A BT'), url('../OCR-a___.woff') format('woff');
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow-x: hidden;
+      background-color: #fff;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 2rem 1rem;
+    }
+
+    .content-container {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3rem;
+      padding-bottom: 4rem;
+    }
+
+    .content-item {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .content-item img, 
+    .content-item video {
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    /* Desktop optimization */
+    @media (min-width: 1024px) {
+      .content-item {
+        max-width: 80%;
+      }
+    }
+
+    /* Tablet optimization */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .content-item {
+        max-width: 90%;
+      }
+    }
+
+    /* Mobile optimization */
+    @media (max-width: 767px) {
+      .content-container {
+        gap: 2rem;
+      }
+      
+      .content-item {
+        max-width: 100%;
+      }
+    }
+
+    /* Footer */
+    .app-footer {
+      position: fixed;
+      bottom: 15px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 0 20px;
+      box-sizing: border-box;
+      z-index: 5;
+    }
+
+    .footer-text {
+      font-family: 'OCR-A BT', monospace;
+      font-size: 0.7rem;
+      color: #d2d2d2;
+      letter-spacing: 0.1em;
+      text-align: right;
+      text-decoration: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .footer-text:hover {
+      opacity: 0.7;
+    }
+
+    /* Media queries for footer */
+    @media (max-width: 768px) {
+      .app-footer {
+        bottom: 10px;
+        padding: 0 15px;
+      }
+      .footer-text {
+        font-size: 0.7rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .app-footer {
+        bottom: 8px;
+        padding: 0 10px;
+      }
+      .footer-text {
+        font-size: 0.56rem;
+      }
+    }
+
+    /* Back button */
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-family: 'OCR-A BT', monospace;
+      font-size: 0.8rem;
+      color: #939393;
+      text-decoration: none;
+      padding: 8px 16px;
+      border: 1px solid #d2d2d2;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .back-button:hover {
+      background-color: #f5f5f5;
+      color: #000;
+    }
+
+    @media (max-width: 768px) {
+      .back-button {
+        top: 10px;
+        left: 10px;
+        font-size: 0.7rem;
+        padding: 6px 12px;
+      }
+    }
+
+    /* Plain video styling - no controls or effects */
+    .plain-video {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      cursor: default;
+    }
+
+    /* Hide video controls even when hovered */
+    .plain-video::-webkit-media-controls {
+      display: none !important;
+    }
+
+    .plain-video::-webkit-media-controls-enclosure {
+      display: none !important;
+    }
+
+    .plain-video::-webkit-media-controls-panel {
+      display: none !important;
+    }
+
+    .plain-video::-webkit-media-controls-play-button {
+      display: none !important;
+    }
+
+    .plain-video::-webkit-media-controls-timeline {
+      display: none !important;
+    }
+
+    .plain-video::-webkit-media-controls-current-time-display {
+      display: none !important;
+    }
+
+    .plain-video::-webkit-media-controls-time-remaining-display {
+      display: none !important;
+    }
+
+    .plain-video::-webkit-media-controls-mute-button {
+      display: none !important;
+    }
+
+    .plain-video::-webkit-media-controls-volume-slider {
+      display: none !important;
+    }
+
+    .plain-video::-webkit-media-controls-fullscreen-button {
+      display: none !important;
+    }
+
+    /* Remove focus outline */
+    .plain-video:focus {
+      outline: none;
+    }
+
+    /* Ensure no vignette or overlay effects */
+    .plain-video::before,
+    .plain-video::after {
+      display: none !important;
+      content: none !important;
+    }
+  </style>
+</head>
+<body>
+  <a href="/" class="back-button">← BACK</a>
+  
+  <div class="content-container">
+    <!-- Order 1 - GIF -->
+    <div class="content-item">
+      <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/order%201-jcwOyu3yGHHpP1DjBzF2cQp50WpgLA.gif" alt="GET YOUR DESIGNS HERE!" loading="lazy">
+    </div>
+    
+    <!-- Order 2 - GIF -->
+    <div class="content-item">
+      <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/order%202-8v7WFwbCpVxFqqnlr5hfWxeia8IwJz.gif" alt="Services menu with cutout.man" loading="lazy">
+    </div>
+    
+    <!-- Order 3 - Video -->
+    <div class="content-item">
+      <video class="plain-video" autoplay loop muted playsinline>
+        <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/order%203-W6OMKlTYAgVNlUVn7ZHb7akTZiGrxT.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    
+    <!-- Order 4 - PNG -->
+    <div class="content-item">
+      <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/order%204-LDiDYdqtvHcNfQrlUf5euwwezmo4rs.png" alt="PREVIEW - Swag Simulator" loading="lazy">
+    </div>
+    
+    <!-- Order 5 - PNG -->
+    <div class="content-item">
+      <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/order%205-tDLsNXjRCT1pCYyXd6UoxCj9prksqb.png" alt="PREVIEW - Storyboarding" loading="lazy">
+    </div>
+  </div>
+
+  <!-- Footer Text -->
+  <div class="app-footer">
+    <a href="https://www.trashux.net" class="footer-text">MADE BY TRASHUX</a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Function to check if element is in viewport
+      function isInViewport(element) {
+        const rect = element.getBoundingClientRect();
+        return (
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+      }
+
+      // Lazy load images and videos when they come into view
+      const mediaElements = document.querySelectorAll('img[loading="lazy"], video');
+      
+      function checkVisibility() {
+        mediaElements.forEach(element => {
+          if (isInViewport(element)) {
+            if (element.tagName === 'VIDEO') {
+              element.load();
+              if (element.hasAttribute('autoplay')) {
+                element.play().catch(e => console.log('Autoplay prevented:', e));
+              }
+            } else if (element.tagName === 'IMG') {
+              element.src = element.getAttribute('data-src') || element.src;
+            }
+          }
+        });
+      }
+
+      // Check visibility on load and scroll
+      window.addEventListener('scroll', checkVisibility);
+      window.addEventListener('resize', checkVisibility);
+      checkVisibility();
+    });
+  </script>
+</body>
+</html>

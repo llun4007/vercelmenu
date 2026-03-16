@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'OCR-B 10 BT', 'OCR B', monospace;
+            background-color: #ffffff;
+            color: #000000;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 3rem;
+        }
+
+        .faq-wrap {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .faq-list {
+            list-style: none;
+        }
+
+        .faq-item {
+            margin-bottom: 5px;
+            border: 1px solid #000000;
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        .faq-q {
+            display: block;
+            width: 100%;
+            padding: 10px 12px;
+            font-family: 'OCR-B 10 BT', 'OCR B', monospace;
+            font-size: 0.95rem;
+            color: #000000;
+            text-align: left;
+            text-transform: uppercase;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .faq-q:hover {
+            opacity: 0.7;
+        }
+
+        .faq-a-wrap {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-item.expanded .faq-a-wrap {
+            max-height: 600px;
+        }
+
+        .faq-a {
+            padding: 6px 12px 10px;
+            font-family: 'OCR-B 10 BT', 'OCR B', monospace;
+            font-size: 0.95rem;
+            color: #000000;
+            text-align: left;
+            text-transform: uppercase;
+            line-height: 1.4;
+        }
+
+        .faq-a a {
+            color: #000;
+            text-decoration: underline;
+        }
+
+        .faq-a a:hover {
+            opacity: 0.7;
+        }
+
+        /* Figma Device Breakpoints - Responsive Design */
+        
+        /* Small Mobile - iPhone SE (320px-374px) */
+        @media (max-width: 374px) {
+            body { padding: 1.5rem 1rem; }
+            .faq-q, .faq-a { font-size: 0.8rem; }
+            .faq-wrap { max-width: 100%; }
+        }
+
+        /* Mobile Portrait - iPhone (375px-567px) */
+        @media (min-width: 375px) and (max-width: 567px) {
+            body { padding: 1.75rem 1.5rem; }
+            .faq-q, .faq-a { font-size: 0.85rem; }
+        }
+
+        /* Mobile Landscape (568px-767px) */
+        @media (min-width: 568px) and (max-width: 767px) {
+            body { padding: 2rem 2rem; }
+            .faq-q, .faq-a { font-size: 0.9rem; }
+        }
+
+        /* Tablet Portrait - iPad (768px-1023px) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            body { padding: 2rem 2.5rem; }
+            .faq-wrap { max-width: 600px; }
+        }
+
+        /* Laptop (1024px-1439px) */
+        @media (min-width: 1024px) and (max-width: 1439px) {
+            body { padding: 2rem 3rem; }
+            .faq-wrap { max-width: 520px; }
+        }
+
+        /* Desktop (1440px-1919px) */
+        @media (min-width: 1440px) and (max-width: 1919px) {
+            body { padding: 2.5rem 3.5rem; }
+            .faq-wrap { max-width: 580px; }
+            .faq-q, .faq-a { font-size: 1rem; }
+        }
+
+        /* Desktop HD (1920px-2559px) */
+        @media (min-width: 1920px) and (max-width: 2559px) {
+            body { padding: 3rem 4rem; }
+            .faq-wrap { max-width: 640px; }
+            .faq-q, .faq-a { font-size: 1.05rem; }
+        }
+
+        /* Ultra-wide (2560px+) */
+        @media (min-width: 2560px) {
+            body { padding: 3.5rem 5rem; }
+            .faq-wrap { max-width: 720px; }
+            .faq-q, .faq-a { font-size: 1.1rem; }
+        }
+
+        /* Touch device optimization */
+        @media (hover: none) and (pointer: coarse) {
+            .faq-q { cursor: default; }
+        }
+    </style>
+</head>
+<body>
+    <div class="faq-wrap">
+        <ul class="faq-list">
+            <li class="faq-item">
+                <button type="button" class="faq-q" data-faq="q1">whats pc13?</button>
+                <div class="faq-a-wrap">
+                    <div class="faq-a">A public color book   live-action (in real life) Oxford Reading Tree (for creativity)—an educational playground</div>
+                </div>
+            </li>
+            <li class="faq-item">
+                <button type="button" class="faq-q" data-faq="q2">who is your avatar?</button>
+                <div class="faq-a-wrap">
+                    <div class="faq-a">people who like play and art  interactive art.   +2 and above</div>
+                </div>
+            </li>
+            <li class="faq-item">
+                <button type="button" class="faq-q" data-faq="q3">why?</button>
+                <div class="faq-a-wrap">
+                    <div class="faq-a">we believe providing artists an opportunity to create and express ideas is a mandatory net positive for society</div>
+                </div>
+            </li>
+            <li class="faq-item">
+                <button type="button" class="faq-q" data-faq="q4">end goal</button>
+                <div class="faq-a-wrap">
+                    <div class="faq-a">vision is that life changing generational inspiring artists outnumber the uninspiring corporate compromising slop disease producing artists 100 to 0 on a universal scale. to make the uninspiring corporate compromising slop disease producing artists extinct</div>
+                </div>
+            </li>
+            <li class="faq-item">
+                <button type="button" class="faq-q" data-faq="q5">how can I be a part of this? how do I join?</button>
+                <div class="faq-a-wrap">
+                    <div class="faq-a">register via website</div>
+                </div>
+            </li>
+            <li class="faq-item">
+                <button type="button" class="faq-q" data-faq="q6">how do I support?</button>
+                <div class="faq-a-wrap">
+                    <div class="faq-a">go to <a href="https://matt2ben.tumblr.com" target="_blank" rel="noopener">matt2ben.tumblr.com</a> for more information and available roles</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        document.querySelectorAll('.faq-q').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var item = this.closest('.faq-item');
+                var wrap = item.querySelector('.faq-a-wrap');
+                var inner = wrap.querySelector('.faq-a');
+                if (item.classList.contains('expanded')) {
+                    wrap.style.maxHeight = '0';
+                    item.classList.remove('expanded');
+                } else {
+                    wrap.style.maxHeight = inner.offsetHeight + 'px';
+                    item.classList.add('expanded');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

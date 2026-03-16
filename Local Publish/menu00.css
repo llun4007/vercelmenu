@@ -1,0 +1,266 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background-color: #FFFFFF;
+  color: #000000;
+  font-family: Arial;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 1.1875;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Match comunal_clone: viewport-filling, centered; content scales to fit, no scroll */
+.scale-viewport {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding-top: 0;
+  padding-bottom: 8vh; /* Increased from 5vh to 8vh to move content higher */
+}
+
+.page-wrapper {
+  width: 1200px;
+  height: 481px;
+  flex-shrink: 0;
+  transform-origin: center center;
+  /* Scale to fit viewport: min of (width ratio, height ratio) = no scroll on any breakpoint */
+  transform: scale(min(calc(100vw / 1200), calc(100vh / 481)));
+}
+
+.content-container {
+  width: 1200px;
+  height: 481px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.content-container .asset {
+  justify-self: start;
+  align-self: start;
+  grid-column: 1;
+  grid-row: 1;
+}
+
+/* Figma Device Breakpoints - Responsive Adjustments */
+
+/* Desktop - 1440px (Figma Desktop) */
+@media (min-width: 1440px) {
+  .scale-viewport {
+    padding-bottom: 8vh;
+  }
+}
+
+/* Laptop - 1024px to 1439px (Figma Laptop) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .scale-viewport {
+    padding-bottom: 8vh;
+  }
+}
+
+/* Tablet Portrait - 768px to 1023px (Figma iPad) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .scale-viewport {
+    padding-bottom: 8vh;
+  }
+}
+
+/* Mobile Landscape - 568px to 767px (Figma iPhone landscape) */
+@media (min-width: 568px) and (max-width: 767px) {
+  .scale-viewport {
+    padding-bottom: 6vh;
+  }
+}
+
+/* Mobile Portrait - 375px to 567px (Figma iPhone) */
+@media (min-width: 375px) and (max-width: 567px) {
+  .scale-viewport {
+    padding-bottom: 5vh;
+  }
+}
+
+/* Small Mobile - 320px to 374px (Figma iPhone SE) */
+@media (max-width: 374px) {
+  .scale-viewport {
+    padding-bottom: 4vh;
+  }
+}
+
+/* MOBILE BREAKPOINT - Using index.css positioning */
+@media (max-width: 575px) {
+  .scale-viewport {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  .page-wrapper {
+    width: 390px;
+    height: 844px;
+    transform: scale(min(calc(100vw / 390), calc(100vh / 844)));
+  }
+  
+  .content-container {
+    width: 390px;
+    height: 844px;
+    position: relative;
+  }
+  
+  .content-container .asset {
+    position: absolute !important;
+    margin: 0 !important;
+  }
+  
+  /* menu0 */
+  #wb_Image1 {
+    left: 1px !important;
+    top: 229px !important;
+    width: 390px !important;
+    height: 219px !important;
+  }
+  
+  /* menuimage1 */
+  #wb_Image3 {
+    left: 46px !important;
+    top: 319px !important;
+    width: 118px !important;
+    height: 60px !important;
+  }
+  
+  /* menuimage2 */
+  #wb_Image2 {
+    left: 242px !important;
+    top: 258px !important;
+    width: 92px !important;
+    height: 140px !important;
+  }
+  
+  /* menutext11 */
+  #wb_Image5 {
+    left: 68px !important;
+    top: 417px !important;
+    width: 66px !important;
+    height: 22px !important;
+  }
+  
+  /* menutext22 */
+  #wb_Image4 {
+    left: 224px !important;
+    top: 412px !important;
+    width: 133px !important;
+    height: 26px !important;
+  }
+}
+
+/* Large Desktop - 1920px and above (Figma Desktop HD) */
+@media (min-width: 1920px) {
+  .scale-viewport {
+    padding-bottom: 9vh;
+  }
+}
+
+/* Ultra-wide - 2560px and above */
+@media (min-width: 2560px) {
+  .scale-viewport {
+    padding-bottom: 10vh;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .clickable-container {
+    cursor: default;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .content-container .asset img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+#wb_Image1 {
+  vertical-align: top;
+}
+#Image1 {
+  border: 0px solid #000000;
+  border-radius: 0px;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#wb_Image2 {
+  vertical-align: top;
+}
+#Image2 {
+  border: 0px solid #000000;
+  border-radius: 0px;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#wb_Image3 {
+  vertical-align: top;
+}
+#Image3 {
+  border: 0px solid #000000;
+  border-radius: 0px;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#wb_Image4 {
+  vertical-align: top;
+}
+#Image4 {
+  border: 0px solid #000000;
+  border-radius: 0px;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#wb_Image5 {
+  vertical-align: top;
+}
+#Image5 {
+  border: 0px solid #000000;
+  border-radius: 0px;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
